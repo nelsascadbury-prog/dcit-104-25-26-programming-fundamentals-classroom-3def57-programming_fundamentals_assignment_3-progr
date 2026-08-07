@@ -45,6 +45,13 @@
 // -----------------------------------------------------------------------------
 // EXPECTED INPUT FORMAT
 // -----------------------------------------------------------------------------
+
+
+
+
+
+
+
 // When entering a row, the user types all values on one line separated by spaces:
 //
 //   Enter number of rows: 2
@@ -66,6 +73,124 @@
 
 // =============================================================================
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
+const readlineSync = require('readline-sync');
+
+// ==========================================
+// YOUR CODE BELOW - remove the // symbols from the scaffold and fill it in
+// ==========================================
+
+function readMatrix() {
+    const rows = readlineSync.questionInt("Enter number of rows: ");
+    const cols = readlineSync.questionInt("Enter number of columns: ");
+    let matrix = [];
+
+    for (let i = 0; i < rows; i++) {
+        const rowInput = readlineSync.question("Enter row " + (i + 1) + ": ");
+        const row = rowInput.split(' ').map(Number);
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+function displayMatrix(matrix) {
+    for (let i = 0; i < matrix.length; i++) {
+        let rowStr = "";
+        for (let j = 0; j < matrix[i].length; j++) {
+            rowStr += matrix[i][j] + " ";
+        }
+        console.log(rowStr.trim());
+    }
+}
+
+function transposeMatrix(matrix) {
+    let rows = matrix.length;
+    let cols = matrix[0].length;
+    let transposed = [];
+
+    for (let j = 0; j < cols; j++) {
+        let newRow = [];
+        for (let i = 0; i < rows; i++) {
+            newRow.push(matrix[i][j]);
+        }
+        transposed.push(newRow);
+    }
+    return transposed;
+}
+
+function addMatrices(matrixA, matrixB) {
+    let rows = matrixA.length;
+    let cols = matrixA[0].length;
+    let result = [];
+
+    for (let i = 0; i < rows; i++) {
+        let newRow = [];
+        for (let j = 0; j < cols; j++) {
+            newRow.push(matrixA[i][j] + matrixB[i][j]);
+        }
+        result.push(newRow);
+    }
+    return result;
+}
+
+function multiplyMatrices(matrixA, matrixB) {
+    let rowsA = matrixA.length;
+    let colsA = matrixA[0].length;
+    let rowsB = matrixB.length;
+    let colsB = matrixB[0].length;
+
+    if (colsA !== rowsB) {
+        console.log("Error: Number of columns in A must equal number of rows in B.");
+        return null;
+    }
+
+    let result = [];
+    for (let i = 0; i < rowsA; i++) {
+        let newRow = [];
+        for (let j = 0; j < colsB; j++) {
+            let sum = 0;
+            for (let k = 0; k < colsA; k++) {
+                sum += matrixA[i][k] * matrixB[k][j];
+            }
+            newRow.push(sum);
+        }
+        result.push(newRow);
+    }
+    return result;
+}
+
+function main() {
+    console.log("--- PART A: Transpose a Matrix ---");
+    let matA = readMatrix();
+    console.log("Original Matrix:");
+    displayMatrix(matA);
+    console.log("Transposed Matrix:");
+    displayMatrix(transposeMatrix(matA));
+
+    console.log("\n--- PART B: Add Two Matrices ---");
+    console.log("Enter Matrix A:");
+    let addA = readMatrix();
+    console.log("Enter Matrix B (same dimensions):");
+    let addB = readMatrix();
+    if (addA.length === addB.length && addA[0].length === addB[0].length) {
+        console.log("Sum Matrix:");
+        displayMatrix(addMatrices(addA, addB));
+    } else {
+        console.log("Error: Matrices must have the exact same dimensions for addition.");
+    }
+
+    console.log("\n--- PART C: Multiply Two Matrices ---");
+    console.log("Enter Matrix A:");
+    let mulA = readMatrix();
+    console.log("Enter Matrix B:");
+    let mulB = readMatrix();
+    let mulResult = multiplyMatrices(mulA, mulB);
+    if (mulResult) {
+        console.log("Product Matrix:");
+        displayMatrix(mulResult);
+    }
+}
+
+main();
 // =============================================================================
 
 const readlineSync = require('readline-sync');
